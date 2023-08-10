@@ -1,11 +1,16 @@
 #!/usr/bin/env node
-var program = require('commander');
-const process = require('process');
-const fs = require('fs');
-const util = require('util');
-readdir = util.promisify(fs.readdir)
-const path = require('path');
-const ERD = require('../lib/ERD');
+import { Command } from 'commander';
+const program = new Command();
+import * as process from 'process';
+import { readdir } from 'node:fs/promises';
+
+import {writeFileSync}from 'fs';
+
+import * as util from 'util';
+
+// const readdir = util.promisify(fs.readdir)
+import * as path from 'path';
+import {generateFromModels} from '../lib/ERD.js';
 const allowedFormats=["svg", "dot", "xdot", "plain", "plain-ext", "ps", "ps2", "json", "json0"];
 const main = async () => {
   try {
@@ -18,7 +23,7 @@ const main = async () => {
       .option('-i, --ignore-index','ignore any files called index.js')
       .parse(process.argv);
     if(allowedFormats.indexOf(program.format)==-1){
-        console.log(`Format :'${program.format}', is not supported.`);
+        console.error(`Format :'${program.format}', is not supported.`);
         return;
     }
     if (program.path && program.output) {
@@ -29,11 +34,16 @@ const main = async () => {
       const models = [];
       for (const _model of modelsPath) {
         if (_model.indexOf('.js') != -1 && !(_model === "index.js" && program.ignoreIndex)){
-          const model = require(path.join(modelDirectory, _model));
+          // const model = require(path.join(modelDirectory, _model));
+          const modelUri = path.join(modelDirectory, _model);
+          
+          const modelUrl = new URL(modelUri, import.meta.url);
+          const tst = await import(modelUrl);
+          const model = tst.default          
           models.push(model);
         }
       }
-      const svg = await ERD.generateFromModels(models, {
+      const svg = await generateFromModels(models, {
         format:program.format,
         collection: {
           nameColor:'lightblue',
@@ -41,11 +51,11 @@ const main = async () => {
         }
       });
 
-      fs.writeFileSync(outputFilePath, svg);
-      console.log('ERD written to',outputFilePath);
+      writeFileSync(outputFilePath, svg);
+      console.info('ERD written to',outputFilePath);
     }
   } catch (e) {
-    console.log(e)
+    console.error(e)
     throw e;
   }
 }
