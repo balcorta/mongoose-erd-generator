@@ -19,7 +19,8 @@ const main = async () => {
       .option('-p, --path <path>', 'set models path wanted to generate an ERD from.')
       .option('-o, --output <path>', 'set output path')
       .option('-f, --format [svg,dot,xdot,plain,plan-ext,ps,ps2,json,json0]')
-      .option('-c, --color <color>')
+      .option('-tc, --titlecolor <titleColor>')
+      .option('-bc, --backgroundcolor <bodyColor>')
       .option('-i, --ignore-index','ignore any files called index.js')
       .parse(process.argv);
     if(allowedFormats.indexOf(program.format)==-1){
@@ -46,8 +47,8 @@ const main = async () => {
       const svg = await generateFromModels(models, {
         format:program.format,
         collection: {
-          nameColor:'lightblue',
-          backgroundColor: program.color || '#4477c9'
+          nameColor: program.titleColor || '#222',
+          backgroundColor: program.bodyColor || '#E6ECF5'
         }
       });
 

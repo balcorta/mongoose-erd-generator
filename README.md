@@ -20,7 +20,8 @@ Usage: mongoose-erd-generator [options]
     -o, --output <path>                                           set output path
     -i, --ignore-index                                            ignore any files called index.js
     -f, --format [svg,dot,xdot,plain,plan-ext,ps,ps2,json,json0]  
-    -c, --color <color>                                           
+    -tc, --titlecolor <titlecolor>
+    -bc, --backgroundcolor <backgroundcolor>                                           
     -h, --help                                 
 
 example
