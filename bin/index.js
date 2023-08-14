@@ -47,7 +47,7 @@ const main = async () => {
       const svg = await generateFromModels(models, {
         format:program.format,
         collection: {
-          nameColor: program.titleColor || '#222',
+          nameColor: program.titleColor || '#404040',
           backgroundColor: program.bodyColor || '#E6ECF5'
         }
       });
