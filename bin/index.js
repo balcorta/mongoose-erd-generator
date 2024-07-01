@@ -48,7 +48,7 @@ const main = async () => {
         format:program.format,
         collection: {
           nameColor: program.titleColor || '#404040',
-          backgroundColor: program.bodyColor || '#E6ECF5'
+          backgroundColor: program.bodyColor || 'lightblue'
         }
       });
 
